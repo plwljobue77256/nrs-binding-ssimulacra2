@@ -164,6 +164,8 @@ jobs:
           name: bindings-${{ matrix.settings.target }}
           path: ${{ env.APP_NAME }}.*.node
           if-no-files-found: error
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   publish:
     name: Publish
     runs-on: ubuntu-latest
