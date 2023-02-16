@@ -145,7 +145,7 @@ jobs:
         run: yarn config set supportedArchitectures.cpu "ia32"
         shell: bash
       - name: Install dependencies
-        run: yarn install --network-timeout 1000000 --registry https://registry.npm.taobao.org/
+        run: yarn install --network-timeout 1000000
       - name: Setup node x86
         uses: actions/setup-node@v3
         if: matrix.settings.target == 'i686-pc-windows-msvc'
@@ -208,7 +208,7 @@ jobs:
             whoami
             env
             freebsd-version
-            yarn install
+            yarn install --network-timeout 1000000
             yarn build
             strip -x *.node
             yarn test
@@ -243,13 +243,8 @@ jobs:
           node-version: ${{ matrix.node }}
           check-latest: true
           cache: yarn
-      - name: Cache NPM dependencies
-        uses: actions/cache@v3
-        with:
-          path: .yarn/cache
-          key: npm-cache-test-${{ matrix.settings.target }}-${{ matrix.node }}-${{ hashFiles('yarn.lock') }}
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --network-timeout 1000000
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
@@ -286,7 +281,7 @@ jobs:
           path: .yarn/cache
           key: npm-cache-test-linux-x64-gnu-${{ matrix.node }}
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --network-timeout 1000000
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
@@ -325,7 +320,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn config set supportedArchitectures.libc "musl"
-          yarn install
+          yarn install --network-timeout 1000000
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
@@ -368,7 +363,7 @@ jobs:
         run: |
           yarn config set supportedArchitectures.cpu "arm64"
           yarn config set supportedArchitectures.libc "glibc"
-          yarn install
+          yarn install --network-timeout 1000000
       - name: Setup and run tests
         uses: addnab/docker-run-action@v3
         with:
@@ -403,7 +398,7 @@ jobs:
         run: |
           yarn config set supportedArchitectures.cpu "arm64"
           yarn config set supportedArchitectures.libc "musl"
-          yarn install
+          yarn install --network-timeout 1000000
       - name: Setup and run tests
         uses: addnab/docker-run-action@v3
         with:
@@ -444,7 +439,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn config set supportedArchitectures.cpu "arm"
-          yarn install
+          yarn install --network-timeout 1000000
       - name: Setup and run tests
         uses: addnab/docker-run-action@v3
         with:
@@ -479,7 +474,7 @@ jobs:
           path: .yarn/cache
           key: npm-cache-ubuntu-latest-publish
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --network-timeout 1000000
       - name: Download all artifacts
         uses: actions/download-artifact@v3
         with:
