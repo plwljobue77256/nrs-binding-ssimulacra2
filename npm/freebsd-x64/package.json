@@ -1,6 +1,6 @@
 {
   "name": "@nrs-binding/ssimulacra2-freebsd-x64",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "os": [
     "freebsd"
   ],
