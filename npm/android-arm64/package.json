@@ -1,6 +1,6 @@
 {
   "name": "@nrs-binding/ssimulacra2-android-arm64",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "os": [
     "android"
   ],
