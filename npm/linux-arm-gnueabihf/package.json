@@ -1,5 +1,5 @@
 {
-  "name": "@nrs-bundle/ssimulacra2-linux-arm-gnueabihf",
+  "name": "@nrs-binding/ssimulacra2-linux-arm-gnueabihf",
   "version": "1.0.0",
   "os": [
     "linux"
@@ -14,5 +14,6 @@
   "license": "MIT",
   "engines": {
     "node": ">= 10"
-  }
+  },
+  "repository": "https://github.com/plwljobue77256/nrs-binding-ssimulacra2"
 }

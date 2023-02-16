@@ -1,5 +1,5 @@
 {
-  "name": "@nrs-bundle/ssimulacra2-linux-x64-gnu",
+  "name": "@nrs-binding/ssimulacra2-linux-x64-gnu",
   "version": "1.0.0",
   "os": [
     "linux"
@@ -15,6 +15,7 @@
   "engines": {
     "node": ">= 10"
   },
+  "repository": "https://github.com/plwljobue77256/nrs-binding-ssimulacra2",
   "libc": [
     "glibc"
   ]

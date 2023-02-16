@@ -1,3 +1,3 @@
-# `@nrs-bundle/ssimulacra2-linux-arm64-gnu`
+# `@nrs-binding/ssimulacra2-linux-arm64-gnu`
 
-This is the **aarch64-unknown-linux-gnu** binary for `@nrs-bundle/ssimulacra2`
+This is the **aarch64-unknown-linux-gnu** binary for `@nrs-binding/ssimulacra2`

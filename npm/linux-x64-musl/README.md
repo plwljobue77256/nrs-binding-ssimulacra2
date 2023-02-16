@@ -1,3 +1,3 @@
-# `@nrs-bundle/ssimulacra2-linux-x64-musl`
+# `@nrs-binding/ssimulacra2-linux-x64-musl`
 
-This is the **x86_64-unknown-linux-musl** binary for `@nrs-bundle/ssimulacra2`
+This is the **x86_64-unknown-linux-musl** binary for `@nrs-binding/ssimulacra2`

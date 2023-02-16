@@ -1,3 +1,3 @@
-# `@nrs-bundle/ssimulacra2-win32-arm64-msvc`
+# `@nrs-binding/ssimulacra2-win32-arm64-msvc`
 
-This is the **aarch64-pc-windows-msvc** binary for `@nrs-bundle/ssimulacra2`
+This is the **aarch64-pc-windows-msvc** binary for `@nrs-binding/ssimulacra2`
