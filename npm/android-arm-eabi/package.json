@@ -1,6 +1,6 @@
 {
   "name": "@nrs-binding/ssimulacra2-android-arm-eabi",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "os": [
     "android"
   ],
