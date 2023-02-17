@@ -34,5 +34,8 @@
     "test": "echo 0",
     "version": "napi version"
   },
-  "repository": "https://github.com/plwljobue77256/nrs-binding-ssimulacra2"
+  "repository": "https://github.com/plwljobue77256/nrs-binding-ssimulacra2",
+  "dependencies": {
+    "sharp": "^0.31.3"
+  }
 }
