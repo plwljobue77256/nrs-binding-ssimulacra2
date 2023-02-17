@@ -1,6 +1,7 @@
 const fs = require('fs');
 const binding = require('./binding');
 const path = require('path');
+const sharp = require('sharp');
 
 // 生成一个随机文件名
 function randomName() {
@@ -10,16 +11,23 @@ function randomName() {
 // 将非png格式的图片通过sharp转换为png格式
 function convertToPng(img) {
   const { ext } = path.parse(img);
-  if (ext !== '.png') {
-    const sharp = require('sharp');
+  const sharpImg = sharp(img);
+  return sharpImg.metadata().then((metadata) => {
     // 生成一个临时图片路径
     if (!fs.existsSync(path.join(__dirname, '/.tmp'))) {
       fs.mkdirSync(path.join(__dirname, '/.tmp'));
     }
     const tmpPath = path.join(__dirname, '/.tmp/', randomName() + '.png');
-    return sharp(img).png().toFile(tmpPath).then(() => tmpPath);
-  }
-  return Promise.resolve(img);
+    if (metadata.format !== 'png') {
+      return sharpImg.png().toFile(tmpPath).then(() => tmpPath);
+    }
+    if (ext !== '.png') {
+      // rust里的image.open依赖文件后缀，所以如果是png格式但是后缀不是png，需要复制一份
+      fs.cpSync(img, tmpPath);
+      return tmpPath;
+    }
+    return img;
+  });
 }
 
 function withImg(img1, img2, callback) {

@@ -32,7 +32,8 @@
     "build:debug": "napi build --platform",
     "prepublishOnly": "napi prepublish -t npm",
     "test": "echo 0",
-    "version": "napi version"
+    "version": "napi version",
+    "publish": "npm version patch && git push --follow-tag"
   },
   "repository": "https://github.com/plwljobue77256/nrs-binding-ssimulacra2",
   "dependencies": {
