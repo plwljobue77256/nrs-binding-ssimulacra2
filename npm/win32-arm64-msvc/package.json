@@ -1,6 +1,6 @@
 {
   "name": "@nrs-binding/ssimulacra2-win32-arm64-msvc",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "os": [
     "win32"
   ],

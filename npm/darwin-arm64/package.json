@@ -1,6 +1,6 @@
 {
   "name": "@nrs-binding/ssimulacra2-darwin-arm64",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "os": [
     "darwin"
   ],
