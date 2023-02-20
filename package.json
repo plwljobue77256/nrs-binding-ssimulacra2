@@ -1,7 +1,7 @@
 {
   "name": "@nrs-binding/ssimulacra2",
   "version": "1.0.12",
-  "main": "index.js",
+  "main": "main.js",
   "types": "index.d.ts",
   "bin": {
     "ssim2": "./bin/ssim2.js"

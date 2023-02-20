@@ -1,59 +1,251 @@
-const fs = require('fs');
-const binding = require('./binding');
-const path = require('path');
-const sharp = require('sharp');
+const { existsSync, readFileSync } = require('fs')
+const { join } = require('path')
 
-// 生成一个随机文件名
-function randomName() {
-  return Math.random().toString(36).slice(2);
+const { platform, arch } = process
+
+let nativeBinding = null
+let localFileExisted = false
+let loadError = null
+
+function isMusl() {
+  // For Node 10
+  if (!process.report || typeof process.report.getReport !== 'function') {
+    try {
+      const lddPath = require('child_process').execSync('which ldd').toString().trim();
+      return readFileSync(lddPath, 'utf8').includes('musl')
+    } catch (e) {
+      return true
+    }
+  } else {
+    const { glibcVersionRuntime } = process.report.getReport().header
+    return !glibcVersionRuntime
+  }
 }
 
-// 将非png格式的图片通过sharp转换为png格式
-function convertToPng(img) {
-  const { ext } = path.parse(img);
-  const sharpImg = sharp(img);
-  return sharpImg.metadata().then((metadata) => {
-    // 生成一个临时图片路径
-    if (!fs.existsSync(path.join(__dirname, '/.tmp'))) {
-      fs.mkdirSync(path.join(__dirname, '/.tmp'));
+switch (platform) {
+  case 'android':
+    switch (arch) {
+      case 'arm64':
+        localFileExisted = existsSync(join(__dirname, 'ssimulacra2.android-arm64.node'))
+        try {
+          if (localFileExisted) {
+            nativeBinding = require('./ssimulacra2.android-arm64.node')
+          } else {
+            nativeBinding = require('@nrs-binding/ssimulacra2-android-arm64')
+          }
+        } catch (e) {
+          loadError = e
+        }
+        break
+      case 'arm':
+        localFileExisted = existsSync(join(__dirname, 'ssimulacra2.android-arm-eabi.node'))
+        try {
+          if (localFileExisted) {
+            nativeBinding = require('./ssimulacra2.android-arm-eabi.node')
+          } else {
+            nativeBinding = require('@nrs-binding/ssimulacra2-android-arm-eabi')
+          }
+        } catch (e) {
+          loadError = e
+        }
+        break
+      default:
+        throw new Error(`Unsupported architecture on Android ${arch}`)
     }
-    const tmpPath = path.join(__dirname, '/.tmp/', randomName() + '.png');
-    if (metadata.format !== 'png') {
-      return sharpImg.png().toFile(tmpPath).then(() => tmpPath);
+    break
+  case 'win32':
+    switch (arch) {
+      case 'x64':
+        localFileExisted = existsSync(
+          join(__dirname, 'ssimulacra2.win32-x64-msvc.node')
+        )
+        try {
+          if (localFileExisted) {
+            nativeBinding = require('./ssimulacra2.win32-x64-msvc.node')
+          } else {
+            nativeBinding = require('@nrs-binding/ssimulacra2-win32-x64-msvc')
+          }
+        } catch (e) {
+          loadError = e
+        }
+        break
+      case 'ia32':
+        localFileExisted = existsSync(
+          join(__dirname, 'ssimulacra2.win32-ia32-msvc.node')
+        )
+        try {
+          if (localFileExisted) {
+            nativeBinding = require('./ssimulacra2.win32-ia32-msvc.node')
+          } else {
+            nativeBinding = require('@nrs-binding/ssimulacra2-win32-ia32-msvc')
+          }
+        } catch (e) {
+          loadError = e
+        }
+        break
+      case 'arm64':
+        localFileExisted = existsSync(
+          join(__dirname, 'ssimulacra2.win32-arm64-msvc.node')
+        )
+        try {
+          if (localFileExisted) {
+            nativeBinding = require('./ssimulacra2.win32-arm64-msvc.node')
+          } else {
+            nativeBinding = require('@nrs-binding/ssimulacra2-win32-arm64-msvc')
+          }
+        } catch (e) {
+          loadError = e
+        }
+        break
+      default:
+        throw new Error(`Unsupported architecture on Windows: ${arch}`)
     }
-    if (ext !== '.png') {
-      // rust里的image.open依赖文件后缀，所以如果是png格式但是后缀不是png，需要复制一份
-      fs.cpSync(img, tmpPath);
-      return tmpPath;
+    break
+  case 'darwin':
+    localFileExisted = existsSync(join(__dirname, 'ssimulacra2.darwin-universal.node'))
+    try {
+      if (localFileExisted) {
+        nativeBinding = require('./ssimulacra2.darwin-universal.node')
+      } else {
+        nativeBinding = require('@nrs-binding/ssimulacra2-darwin-universal')
+      }
+      break
+    } catch {}
+    switch (arch) {
+      case 'x64':
+        localFileExisted = existsSync(join(__dirname, 'ssimulacra2.darwin-x64.node'))
+        try {
+          if (localFileExisted) {
+            nativeBinding = require('./ssimulacra2.darwin-x64.node')
+          } else {
+            nativeBinding = require('@nrs-binding/ssimulacra2-darwin-x64')
+          }
+        } catch (e) {
+          loadError = e
+        }
+        break
+      case 'arm64':
+        localFileExisted = existsSync(
+          join(__dirname, 'ssimulacra2.darwin-arm64.node')
+        )
+        try {
+          if (localFileExisted) {
+            nativeBinding = require('./ssimulacra2.darwin-arm64.node')
+          } else {
+            nativeBinding = require('@nrs-binding/ssimulacra2-darwin-arm64')
+          }
+        } catch (e) {
+          loadError = e
+        }
+        break
+      default:
+        throw new Error(`Unsupported architecture on macOS: ${arch}`)
     }
-    return img;
-  });
+    break
+  case 'freebsd':
+    if (arch !== 'x64') {
+      throw new Error(`Unsupported architecture on FreeBSD: ${arch}`)
+    }
+    localFileExisted = existsSync(join(__dirname, 'ssimulacra2.freebsd-x64.node'))
+    try {
+      if (localFileExisted) {
+        nativeBinding = require('./ssimulacra2.freebsd-x64.node')
+      } else {
+        nativeBinding = require('@nrs-binding/ssimulacra2-freebsd-x64')
+      }
+    } catch (e) {
+      loadError = e
+    }
+    break
+  case 'linux':
+    switch (arch) {
+      case 'x64':
+        if (isMusl()) {
+          localFileExisted = existsSync(
+            join(__dirname, 'ssimulacra2.linux-x64-musl.node')
+          )
+          try {
+            if (localFileExisted) {
+              nativeBinding = require('./ssimulacra2.linux-x64-musl.node')
+            } else {
+              nativeBinding = require('@nrs-binding/ssimulacra2-linux-x64-musl')
+            }
+          } catch (e) {
+            loadError = e
+          }
+        } else {
+          localFileExisted = existsSync(
+            join(__dirname, 'ssimulacra2.linux-x64-gnu.node')
+          )
+          try {
+            if (localFileExisted) {
+              nativeBinding = require('./ssimulacra2.linux-x64-gnu.node')
+            } else {
+              nativeBinding = require('@nrs-binding/ssimulacra2-linux-x64-gnu')
+            }
+          } catch (e) {
+            loadError = e
+          }
+        }
+        break
+      case 'arm64':
+        if (isMusl()) {
+          localFileExisted = existsSync(
+            join(__dirname, 'ssimulacra2.linux-arm64-musl.node')
+          )
+          try {
+            if (localFileExisted) {
+              nativeBinding = require('./ssimulacra2.linux-arm64-musl.node')
+            } else {
+              nativeBinding = require('@nrs-binding/ssimulacra2-linux-arm64-musl')
+            }
+          } catch (e) {
+            loadError = e
+          }
+        } else {
+          localFileExisted = existsSync(
+            join(__dirname, 'ssimulacra2.linux-arm64-gnu.node')
+          )
+          try {
+            if (localFileExisted) {
+              nativeBinding = require('./ssimulacra2.linux-arm64-gnu.node')
+            } else {
+              nativeBinding = require('@nrs-binding/ssimulacra2-linux-arm64-gnu')
+            }
+          } catch (e) {
+            loadError = e
+          }
+        }
+        break
+      case 'arm':
+        localFileExisted = existsSync(
+          join(__dirname, 'ssimulacra2.linux-arm-gnueabihf.node')
+        )
+        try {
+          if (localFileExisted) {
+            nativeBinding = require('./ssimulacra2.linux-arm-gnueabihf.node')
+          } else {
+            nativeBinding = require('@nrs-binding/ssimulacra2-linux-arm-gnueabihf')
+          }
+        } catch (e) {
+          loadError = e
+        }
+        break
+      default:
+        throw new Error(`Unsupported architecture on Linux: ${arch}`)
+    }
+    break
+  default:
+    throw new Error(`Unsupported OS: ${platform}, architecture: ${arch}`)
 }
 
-function withImg(img1, img2, callback) {
-  return Promise.all([convertToPng(img1), convertToPng(img2)]).then((res) => {
-    const img1Png = res[0];
-    const img2Png = res[1];
-
-    const result = callback(img1Png, img2Png);
-
-    // 如果是临时图片，需要在比较完成后删除
-    if (img1Png !== img1) {
-      fs.rmSync(img1Png);
-    }
-    if (img2Png !== img2) {
-      fs.rmSync(img2Png);
-    }
-
-    return result;
-  });
+if (!nativeBinding) {
+  if (loadError) {
+    throw loadError
+  }
+  throw new Error(`Failed to load native binding`)
 }
 
-function getScore(img1, img2) {
-  return withImg(img1, img2, (img1Png, img2Png) => {
-    const score = binding.getScore(img1Png, img2Png);
-    return score;
-  });
-}
+const { getScore } = nativeBinding
 
-module.exports.getScore = getScore;
+module.exports.getScore = getScore
