@@ -4,7 +4,7 @@ const ops = stdio.getopt({});
 
 const cwd = process.cwd();
 const path = require("path");
-const { getScore } = require("../index");
+const { getScore } = require("../main");
 
 const src = path.resolve(cwd, ops.args[0]);
 const dist = path.resolve(cwd, ops.args[1]);
