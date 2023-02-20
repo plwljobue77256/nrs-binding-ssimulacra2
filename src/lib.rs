@@ -1,9 +1,6 @@
 #![deny(clippy::all)]
 
-use std::path::Path;
-
 use napi_derive::napi;
-use napi::*;
 use ssimulacra2::*;
 
 #[napi]

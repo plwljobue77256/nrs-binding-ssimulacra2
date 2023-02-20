@@ -1,21 +1,21 @@
 #!/usr/bin/env node
-const stdio = require("stdio");
-const ops = stdio.getopt({});
+const { program } = require("commander");
 
 const cwd = process.cwd();
 const path = require("path");
 const { getScore } = require("../main");
 
-const src = path.resolve(cwd, ops.args[0]);
-const dist = path.resolve(cwd, ops.args[1]);
+program.name('ssim2').description("calculate ssimulacra2 score").usage('<src> <dist>');
 
-async function run() {
+program.argument('<src>', 'source image path');
+program.argument('<dist>', 'dist image path');
+program.action(async (src, dist) => {
   const start = Date.now();
   const score = await getScore(src, dist);
   console.log('');
   console.log('*** ssimulacra2 ***');
   console.log(`score: `, score);
   console.log(`cost: `, Date.now() - start, 'ms');
-}
+});
 
-run();
+program.parse();

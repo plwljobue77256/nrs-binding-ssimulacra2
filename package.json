@@ -2,7 +2,7 @@
   "name": "@nrs-binding/ssimulacra2",
   "version": "1.0.12",
   "main": "main.js",
-  "types": "index.d.ts",
+  "types": "main.d.ts",
   "bin": {
     "ssim2": "./bin/ssim2.js"
   },
@@ -40,6 +40,7 @@
   },
   "repository": "https://github.com/plwljobue77256/nrs-binding-ssimulacra2",
   "dependencies": {
+    "commander": "^10.0.0",
     "sharp": "^0.31.3",
     "stdio": "^2.1.1"
   }

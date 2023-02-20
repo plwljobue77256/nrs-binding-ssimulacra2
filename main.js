@@ -1,5 +1,5 @@
 const fs = require('fs');
-const binding = require('./binding');
+const binding = require('./index');
 const path = require('path');
 const sharp = require('sharp');
 
