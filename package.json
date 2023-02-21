@@ -24,7 +24,8 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@napi-rs/cli": "^2.13.0"
+    "@napi-rs/cli": "^2.13.0",
+    "@types/sharp": "^0.31.1"
   },
   "engines": {
     "node": ">= 10"
@@ -42,6 +43,7 @@
   "dependencies": {
     "commander": "^10.0.0",
     "sharp": "^0.31.3",
+    "ssim.js": "^3.5.0",
     "stdio": "^2.1.1"
   }
 }
