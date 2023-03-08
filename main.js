@@ -23,7 +23,7 @@ function convertToPng(img) {
     }
     if (ext !== '.png') {
       // rust里的image.open依赖文件后缀，所以如果是png格式但是后缀不是png，需要复制一份
-      fs.cpSync(img, tmpPath);
+      fs.copyFileSync(img, tmpPath);
       return tmpPath;
     }
     return img;
