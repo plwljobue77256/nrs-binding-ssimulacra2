@@ -1,6 +1,6 @@
 {
   "name": "@nrs-binding/ssimulacra2-linux-x64-musl",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "os": [
     "linux"
   ],
