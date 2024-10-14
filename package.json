@@ -1,6 +1,6 @@
 {
   "name": "@nrs-binding/ssimulacra2",
-  "version": "1.0.21",
+  "version": "1.0.20",
   "main": "main.js",
   "types": "main.d.ts",
   "bin": {
@@ -24,7 +24,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@napi-rs/cli": "2.16.3",
+    "@napi-rs/cli": "^2.13.0",
     "@types/sharp": "^0.31.1"
   },
   "engines": {
