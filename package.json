@@ -1,6 +1,6 @@
 {
   "name": "@nrs-binding/ssimulacra2",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "main": "main.js",
   "types": "main.d.ts",
   "bin": {

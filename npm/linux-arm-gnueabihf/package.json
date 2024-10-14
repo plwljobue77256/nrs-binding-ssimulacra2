@@ -1,6 +1,6 @@
 {
   "name": "@nrs-binding/ssimulacra2-linux-arm-gnueabihf",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "os": [
     "linux"
   ],
